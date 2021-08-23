@@ -7,10 +7,10 @@ const { Schema } = mongoose;
 const monumentSchema = new Schema
 (
     {
-        Artist: 
+        artist: 
         {
             type: String,
-            required: true,
+            required: 'please enter the Artist',
             trim: true,
         },
         
@@ -47,12 +47,12 @@ const monumentSchema = new Schema
 
 // Middleware
 monumentSchema.methods.toJSON = function (){
-    const article = this;
-    const articleObject = article.toObject();
+    const monument = this;
+    const monumentObject = monument.toObject();
     
-    delete articleObject.image;
+    delete monumentObject.image;
 
-    return articleObject;
+    return monumentObject;
 }
 // _____________________________________________________________________________
 
