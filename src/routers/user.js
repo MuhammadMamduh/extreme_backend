@@ -3,7 +3,7 @@ const express = require('express');
 const User = require('../models/user');
 const Monument = require('../models/monument');
 const router = express.Router();
-const auth = require('../middleware/auth');
+const {auth} = require('../middleware/auth');
 
 // Sign Up
 router.post('/user', async(req, res)=>{

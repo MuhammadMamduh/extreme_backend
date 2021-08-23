@@ -23,4 +23,24 @@ const auth = async (req, res, next)=> {
     
 }
 
-module.exports = auth;
+function authRole(role) {
+    return async (req, res, next) => {
+
+        const token = req.header('Authorization').replace('Bearer ', '');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        // console.log(decoded);
+        const user = await User.findOne({_id:decoded._id, 'tokens.token':token});
+
+        if (user.role !== role) {
+            res.status(401)
+            return res.send('Not allowed')
+        }
+  
+      next()
+    }
+}
+
+module.exports = {
+    auth,
+    authRole
+};

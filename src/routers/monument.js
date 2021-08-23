@@ -4,12 +4,12 @@ const moment = require('moment');
 const Monument = require('../models/monument');
 const User = require('../models/user');
 const router = express.Router();
-const auth = require('../middleware/auth');
+const {auth, authRole} = require('../middleware/auth');
 const upload = require('../middleware/upload');
 
 
 // POST Art
-router.post('/art', auth, upload.single('picture'), async(req, res)=>{
+router.post('/art', auth, authRole("ADMIN"), upload.single('picture'), async(req, res)=>{
     // console.log(req.body); // testing purposes
     const newMonument = new Monument({...req.body, createdBy: req.user._id});
     
@@ -71,7 +71,7 @@ router.get('/art/:id', async(req, res)=>{
 });
 
 // Update Art
-router.patch('/art/:id', auth, upload.single('picture'), async (req, res)=>{
+router.patch('/art/:id', auth, authRole("ADMIN"), upload.single('picture'), async (req, res)=>{
     const allowed = ['artist', 'description', 'picture'];
     console.log(req.body);
     const upcoming = Object.keys(req.body);
@@ -107,7 +107,7 @@ router.patch('/art/:id', auth, upload.single('picture'), async (req, res)=>{
 
 
 // HardDelete a Monument
-router.delete('/art/delete/:id', auth, async(req, res)=>{
+router.delete('/art/:id', auth, authRole("ADMIN"), async(req, res)=>{
     try{
         if(!Monument.validateId(req.params.id)){
             throw new Error("Resource Not Found");
@@ -130,8 +130,9 @@ router.delete('/art/delete/:id', auth, async(req, res)=>{
     }
 });
 
+// _____________________________________________________________________________________________________
 // SoftDelete an Article
-router.patch('/art/delete/:id', auth, async(req, res)=>{
+router.patch('/art/delete/:id', auth, authRole("ADMIN"), async(req, res)=>{
     try{
         if(!Monument.validateId(req.params.id)){
             throw new Error("Resource Not Found");
