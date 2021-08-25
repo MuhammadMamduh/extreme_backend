@@ -3,7 +3,7 @@ const express = require('express');
 const User = require('../models/user');
 const Monument = require('../models/monument');
 const router = express.Router();
-const {auth} = require('../middleware/auth');
+const {auth, authRole} = require('../middleware/auth');
 
 // Sign Up
 router.post('/user', async(req, res)=>{
@@ -95,7 +95,7 @@ router.get('users/me', (req, res)=>{
 
 
 // get all users (Testing)
-router.get('/users', async (req, res) => {
+router.get('/users', auth, authRole("ADMIN"), async (req, res) => {
     try{
         const users = await User.find({});
         res.status(200).send({users});
