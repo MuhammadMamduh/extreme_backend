@@ -98,7 +98,7 @@ router.get('users/me', (req, res)=>{
 router.get('/users', auth, authRole("ADMIN"), async (req, res) => {
     try{
         const users = await User.find({});
-        res.status(200).send({users});
+        res.status(200).send(users);
     }catch(err){
         console.log(err);
         
