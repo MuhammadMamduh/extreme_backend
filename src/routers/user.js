@@ -14,7 +14,7 @@ router.post('/user', async(req, res)=>{
         // This is another approach, to 
         // const token = await newUser.generateAuthToken(); // & authorize
 
-        res.status(201).send({newUser});
+        res.status(201).send(newUser);
     }catch(err){
         console.log(err);
 
