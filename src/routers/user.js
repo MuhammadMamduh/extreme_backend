@@ -94,11 +94,24 @@ router.get('users/me', (req, res)=>{
 });
 
 
-// get all users (Testing)
+// get all users
 router.get('/users', auth, authRole("ADMIN"), async (req, res) => {
     try{
-        const users = await User.find({});
+        const users = await User.find({}).skip(parseInt(req.query.skip)).limit(parseInt(req.query.limit));
+
         res.status(200).send(users);
+    }catch(err){
+        console.log(err);
+        
+        res.status(500).send({err: "sth went wrong"});
+    }
+});
+
+router.get('/users/count', auth, authRole("ADMIN"), async (req, res) => {
+    try{
+        const users = await User.find({})
+
+        res.status(200).send({length:users.length});
     }catch(err){
         console.log(err);
         

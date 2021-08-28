@@ -10,7 +10,8 @@ const upload = require('../middleware/upload');
 
 // POST Art
 router.post('/art', auth, authRole("ADMIN"), upload.single('picture'), async(req, res)=>{
-    // console.log(req.body); // testing purposes
+    console.log(req.body); // testing purposes
+    console.log(req.user._id); // testing purposes
     const newMonument = new Monument({...req.body, createdBy: req.user._id});
     
     try{
@@ -24,8 +25,9 @@ router.post('/art', auth, authRole("ADMIN"), upload.single('picture'), async(req
         console.log(err);
         res.status(500).send({msg: "The server encountered an unexpected condition that prevented it from fulfilling the request."});
     }
-}, (error, req, res, next)=>{
-    res.status(400).send({msg: error.message});
+}, 
+(error, req, res, next)=>{
+    res.status(400).send({msg: error});
 });
 
 
@@ -33,13 +35,23 @@ router.post('/art', auth, authRole("ADMIN"), upload.single('picture'), async(req
 router.get('/art', async(req, res) => {
     try{
         let monuments = await Monument.find({deleted: false}).populate("createdBy").skip(parseInt(req.query.skip)).limit(parseInt(req.query.limit)).sort({'updatedAt': -1});
-        // articles = Object.entries(articles)
-        console.log(typeof (monuments));
 
         res.status(200).send(monuments);
     }catch(err){
         console.log(err.message);
 
+        res.status(500).send({msg: "The server encountered an unexpected condition that prevented it from fulfilling the request."});
+    }
+});
+
+// Art Count
+router.get('/art/count', async(req, res) => {
+    try{
+        let art = await Monument.find({deleted: false});
+
+        res.status(200).send({length:art.length});
+    }catch(err){
+        console.log(err.message);
         res.status(500).send({msg: "The server encountered an unexpected condition that prevented it from fulfilling the request."});
     }
 });
