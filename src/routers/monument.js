@@ -34,7 +34,7 @@ router.post('/art', auth, authRole("ADMIN"), upload.single('picture'), async(req
 // GET ALL Art
 router.get('/art', async(req, res) => {
     try{
-        let monuments = await Monument.find({deleted: false}).populate("createdBy").skip(parseInt(req.query.skip)).limit(parseInt(req.query.limit)).sort({'updatedAt': -1});
+        let monuments = await Monument.find({deleted: false}).skip(parseInt(req.query.skip)).limit(parseInt(req.query.limit)).sort({'updatedAt': -1});
 
         res.status(200).send(monuments);
     }catch(err){
@@ -118,7 +118,7 @@ router.patch('/art/:id', auth, authRole("ADMIN"), upload.single('picture'), asyn
 });
 
 
-// HardDelete a Monument
+// HardDelete Art
 router.delete('/art/:id', auth, authRole("ADMIN"), async(req, res)=>{
     try{
         if(!Monument.validateId(req.params.id)){
@@ -143,7 +143,7 @@ router.delete('/art/:id', auth, authRole("ADMIN"), async(req, res)=>{
 });
 
 // _____________________________________________________________________________________________________
-// SoftDelete an Article
+// SoftDelete Art
 router.patch('/art/delete/:id', auth, authRole("ADMIN"), async(req, res)=>{
     try{
         if(!Monument.validateId(req.params.id)){
@@ -168,7 +168,7 @@ router.patch('/art/delete/:id', auth, authRole("ADMIN"), async(req, res)=>{
         res.status(500).send({msg: "The server encountered an unexpected condition that prevented it from fulfilling the request."});
     }
 });
-// Get Article image ONLY
+// Get Art image ONLY
 router.get('/monument/:id/image', async(req, res)=>{
     try {
         if(!Monument.validateId(req.params.id)){
